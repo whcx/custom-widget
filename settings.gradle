@@ -1,0 +1,2 @@
+rootProject.name='DetailModule'
+include ':app'
