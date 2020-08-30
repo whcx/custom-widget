@@ -1,5 +1,5 @@
 # custom-widget
-基于ConstraintLayout定义组件，仅适用java代码完成布局，方便在jar包中使用。
+基于ConstraintLayout定义组件，仅使用java代码完成布局，方便在jar包中使用。
 
 做个记录，方便重用，控件的测试以View + Fragment启动
 
