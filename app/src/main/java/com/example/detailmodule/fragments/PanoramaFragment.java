@@ -12,12 +12,18 @@ import com.example.detailmodule.views.PanoramaViewPanel;
 
 
 public class PanoramaFragment extends BaseFragment implements BaseFragment.ExitFragmentListener{
+    private int mImgResId;
     private String mPanoramaUrl = null;
     private PanoramaViewPanel mPanoramaViewPanel = null;
 
     public PanoramaFragment() {
         super();
         mPanoramaUrl = ParamsUtil.DETAIL_PANORAMA_URL;
+    }
+
+    public PanoramaFragment(int resId) {
+        super();
+        mImgResId = resId;
     }
 
     @Override
@@ -54,7 +60,8 @@ public class PanoramaFragment extends BaseFragment implements BaseFragment.ExitF
         }
         mPanoramaViewPanel.setExitFragmentListener(this);
         mPanoramaViewPanel.setParentId(view.getId());
-        mPanoramaViewPanel.setInitData(mPanoramaUrl);
+//        mPanoramaViewPanel.setInitData(mPanoramaUrl);
+        mPanoramaViewPanel.setInitData(mImgResId);
         view.removeView(mPanoramaViewPanel.getPortraitView());
         view.addView(mPanoramaViewPanel.getPortraitView());
         return mPanoramaViewPanel;
@@ -67,7 +74,8 @@ public class PanoramaFragment extends BaseFragment implements BaseFragment.ExitF
         }
         mPanoramaViewPanel.setExitFragmentListener(this);
         mPanoramaViewPanel.setParentId(view.getId());
-        mPanoramaViewPanel.setInitData(mPanoramaUrl);
+//        mPanoramaViewPanel.setInitData(mPanoramaUrl);
+        mPanoramaViewPanel.setInitData(mImgResId);
         view.removeView(mPanoramaViewPanel.getLandscapeView());
         view.addView(mPanoramaViewPanel.getLandscapeView());
         return mPanoramaViewPanel;

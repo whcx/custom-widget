@@ -113,6 +113,10 @@ public class PanoramaViewPanel extends ConstraintLayout implements SensorEventLi
         mPanoramaBall = new PanoramaBall(mContext, HttpUtils.getFileFromUri(panoramaUrl));
     }
 
+    public void setInitData(int resId) {
+        mPanoramaBall = new PanoramaBall(mContext, resId);
+    }
+
     private void initViewId() {
         mPanoramaViewPanelId = View.generateViewId();
         mGLSurfaceViewId = View.generateViewId();
@@ -263,7 +267,7 @@ public class PanoramaViewPanel extends ConstraintLayout implements SensorEventLi
 
     private void showExitDetailHint() {
         try {
-            String msg = new String("双击退出标牌详细介绍!".getBytes(), "UTF-8");
+            String msg = new String("双击详细介绍!".getBytes(), "UTF-8");
             Toast toast = Toast.makeText(mContext,msg,Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER,0,0);
             toast.show();
