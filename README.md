@@ -9,3 +9,4 @@
 ![image](https://github.com/whcx/custom-widget/blob/master/images/device-2020-08-29-180204.png)
 
 3，基于Opengl实现全景图效果，参考了大神的github https://github.com/CN-ZPH/Three360panorama。PanoramaViewPanel，PanoramaFragment
+！[image](https://github.com/whcx/custom-widget/blob/master/images/device-2020-08-30-084938.png)
