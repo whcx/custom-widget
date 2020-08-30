@@ -3,18 +3,26 @@ package com.example.detailmodule;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.detailmodule.fragments.BaseFragment;
 import com.example.detailmodule.fragments.DetailFragment;
+import com.example.detailmodule.fragments.PanoramaFragment;
 import com.example.detailmodule.fragments.RedPaperFragment;
+import com.example.detailmodule.utils.HttpUtils;
 import com.example.detailmodule.utils.ParamsUtil;
+
+import java.io.UnsupportedEncodingException;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -48,8 +56,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.d(TAG,"onConfigurationChanged,onResume");
-        testLuckyView();
+//        testLuckyView();
 //        testDetailView();
+        testPanoramaView();
     }
 
     @Override
@@ -79,6 +88,16 @@ public class MainActivity extends AppCompatActivity {
         DetailFragment detailFragment = new DetailFragment();
         fragmentTransaction.add(detailFragment,"detail");
         fragmentTransaction.show(detailFragment);
+        fragmentTransaction.commit();
+    }
+
+    public void testPanoramaView() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        PanoramaFragment panoramaFragment = new PanoramaFragment(R.drawable.test_panorama);
+
+        fragmentTransaction.add(panoramaFragment, BaseFragment.PANORAMA_TAG);
+        fragmentTransaction.show(panoramaFragment);
         fragmentTransaction.commit();
     }
     /**

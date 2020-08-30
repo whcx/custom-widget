@@ -27,7 +27,7 @@ public class PanoramaBall implements GLSurfaceView.Renderer, IScreenChangedListe
     private FloatBuffer mVertexBuff;
     private FloatBuffer mTextureBuff;
     private int mTextureID;
-    private int mImgId;
+    private int mImgResId;
     private String mImgFilePath;
     public float xAngle = 0.0F;
     public float yAngle = 90.0F;
@@ -38,6 +38,12 @@ public class PanoramaBall implements GLSurfaceView.Renderer, IScreenChangedListe
     public PanoramaBall(Context context, String filePath) {
         mContext = context;
         mImgFilePath = filePath;
+        initCoordinate();
+    }
+
+    public PanoramaBall(Context context, int resID) {
+        mContext = context;
+        mImgResId = resID;
         initCoordinate();
     }
 
@@ -172,8 +178,8 @@ public class PanoramaBall implements GLSurfaceView.Renderer, IScreenChangedListe
         mAPositionHandler = GLES20.glGetAttribLocation(mProgram, "aPosition");
         mUProjectMatrixHandler = GLES20.glGetUniformLocation(mProgram, "uProjectMatrix");
         mATextureCoordHandler = GLES20.glGetAttribLocation(mProgram, "aTextureCoord");
-//        mTextureID = PanoramaGLUtils.initTexture(mContext, mImgId);
-        mTextureID = PanoramaGLUtils.initTexture(mContext, mImgFilePath);
+        mTextureID = PanoramaGLUtils.initTexture(mContext, mImgResId);
+//        mTextureID = PanoramaGLUtils.initTexture(mContext, mImgFilePath);
         GLES20.glVertexAttribPointer(mAPositionHandler, 3, GLES20.GL_FLOAT, false, 0, mVertexBuff);
         GLES20.glVertexAttribPointer(mATextureCoordHandler, 2, GLES20.GL_FLOAT, false, 0, mTextureBuff);
         GLES20.glEnableVertexAttribArray(mAPositionHandler);
