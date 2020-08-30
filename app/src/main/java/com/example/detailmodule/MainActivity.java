@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
     public void testPanoramaView() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        PanoramaFragment panoramaFragment = new PanoramaFragment(R.drawable.test_panorama);
+        PanoramaFragment panoramaFragment = new PanoramaFragment(R.drawable.keting);
 
         fragmentTransaction.add(panoramaFragment, BaseFragment.PANORAMA_TAG);
         fragmentTransaction.show(panoramaFragment);
