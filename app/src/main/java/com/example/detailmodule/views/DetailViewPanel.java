@@ -18,9 +18,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.method.ScrollingMovementMethod;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -29,12 +31,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.detailmodule.R;
 import com.example.detailmodule.adapter.DetailRecycleAdapter;
 import com.example.detailmodule.fragments.BaseFragment;
 import com.example.detailmodule.fragments.DetailFragment;
+import com.example.detailmodule.fragments.PanoramaFragment;
 import com.example.detailmodule.utils.HttpUtils;
 import com.example.detailmodule.utils.ParamsUtil;
 
@@ -52,7 +58,7 @@ public class DetailViewPanel extends ConstraintLayout implements View.OnClickLis
     private static final String TAG = DetailViewPanel.class.getSimpleName();
     private DetailViewPanel mDetailViewPanel = null;
     private Context mContext;
-    private final int BACKGROUND_COLOR = 0x40C0C0C0;
+    private final int BACKGROUND_COLOR = 0xC8FFFFFF; //ARGB
     private final int BG_ALPHA = 128;
     private int mParentViewId = -1;
     private int mDetailPanelViewId = -1;
@@ -108,9 +114,10 @@ public class DetailViewPanel extends ConstraintLayout implements View.OnClickLis
         initViewId();
         setId(mDetailPanelViewId);
         setBackgroundColor(BACKGROUND_COLOR);
-        getBackground().setAlpha(BG_ALPHA);
+//        getBackground().setAlpha(BG_ALPHA);
         mList = new ArrayList<Bitmap>();
         mBitmapMap = new HashMap<String ,Bitmap>();
+//        setOnFocusChangeListener(this::onFocusChange);
     }
 
     public void setExitFragmentListener(BaseFragment.ExitFragmentListener exitListener) {
@@ -123,13 +130,13 @@ public class DetailViewPanel extends ConstraintLayout implements View.OnClickLis
 
     private void initBitmapResource() {
         AssetManager assetManager = mContext.getResources().getAssets();
-        try (InputStream inputStream = assetManager.open("drawable/detail_audio_2.png")){
+        try (InputStream inputStream = assetManager.open("gritworld/drawable/detail_audio.png")){
             mAudioBitmap = BitmapFactory.decodeStream(inputStream);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        try (InputStream inputStream = assetManager.open("drawable/detail_panoramic_2.png")){
+        try (InputStream inputStream = assetManager.open("gritworld/drawable/detail_panoramic.png")){
             mPanoramicBitmap = BitmapFactory.decodeStream(inputStream);
         } catch (IOException e) {
             e.printStackTrace();
@@ -164,7 +171,7 @@ public class DetailViewPanel extends ConstraintLayout implements View.OnClickLis
 
     private void showExitDetailHint() {
         try {
-            String msg = new String("双击详细介绍!".getBytes(), "UTF-8");
+            String msg = new String("双击退出标牌详细介绍!".getBytes(), "UTF-8");
             Toast toast = Toast.makeText(mContext,msg,Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER,0,0);
             toast.show();
@@ -347,7 +354,7 @@ public class DetailViewPanel extends ConstraintLayout implements View.OnClickLis
             mAudioBtnParams.bottomMargin = BUTTON_W_H * 2;
         }
     }
-    
+
     private void initPortraitParams() {
         int width = ParamsUtil.getScreenWidth(mContext);
         int height = ParamsUtil.getScreenHeight(mContext);
@@ -363,7 +370,7 @@ public class DetailViewPanel extends ConstraintLayout implements View.OnClickLis
         mDetailViewParams.leftMargin = (int)(2.5f * DETAIL_PANEL_PARAM_W);
     }
 
-    public View getPortraitView() {
+    public DetailViewPanel getPortraitView() {
         removeAllViews();
         initPortraitParams();
         setLayoutParams(mDetailViewParams);
@@ -380,7 +387,7 @@ public class DetailViewPanel extends ConstraintLayout implements View.OnClickLis
         return this;
     }
 
-    public View getLandscapeView() {
+    public DetailViewPanel getLandscapeView() {
         removeAllViews();
         initLandscapeParams();
         setLayoutParams(mDetailViewParams);
@@ -394,7 +401,6 @@ public class DetailViewPanel extends ConstraintLayout implements View.OnClickLis
         addView(mAudioBtn, mAudioBtnParams);
         setFocusable(true);
         requestFocus();
-//        setOnFocusChangeListener(this::onFocusChange);
         return this;
     }
 
@@ -421,6 +427,7 @@ public class DetailViewPanel extends ConstraintLayout implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
+
         mClickCount = 0;
         if (v == mAudioBtn) {
 
@@ -431,11 +438,13 @@ public class DetailViewPanel extends ConstraintLayout implements View.OnClickLis
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
+
         return false;
     }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
+
         if (ev.getAction() == MotionEvent.ACTION_UP) {
             mClickCount++;
             mHandler.postDelayed(new Runnable() {
@@ -452,6 +461,7 @@ public class DetailViewPanel extends ConstraintLayout implements View.OnClickLis
     }
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
+
         if (!hasFocus) {
             removeDetailViews();
         }

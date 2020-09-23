@@ -145,7 +145,7 @@ public class PanoramaViewPanel extends ConstraintLayout implements SensorEventLi
         mPanoramaViewParams.gravity = Gravity.CENTER;
     }
 
-    public View getPortraitView() {
+    public PanoramaViewPanel getPortraitView() {
         mIsPortrait = true;
         removeAllViews();
         initPortraitParams();
@@ -157,7 +157,7 @@ public class PanoramaViewPanel extends ConstraintLayout implements SensorEventLi
         return this;
     }
 
-    public View getLandscapeView() {
+    public PanoramaViewPanel getLandscapeView() {
         mIsPortrait = false;
         removeAllViews();
         initLandscapeParams();
@@ -267,7 +267,7 @@ public class PanoramaViewPanel extends ConstraintLayout implements SensorEventLi
 
     private void showExitDetailHint() {
         try {
-            String msg = new String("双击详细介绍!".getBytes(), "UTF-8");
+            String msg = new String("双击退出标牌详细介绍!".getBytes(), "UTF-8");
             Toast toast = Toast.makeText(mContext,msg,Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER,0,0);
             toast.show();

@@ -12,7 +12,7 @@ import com.example.detailmodule.views.PanoramaViewPanel;
 
 
 public class PanoramaFragment extends BaseFragment implements BaseFragment.ExitFragmentListener{
-    private int mImgResId;
+    private int mResId;
     private String mPanoramaUrl = null;
     private PanoramaViewPanel mPanoramaViewPanel = null;
 
@@ -21,9 +21,9 @@ public class PanoramaFragment extends BaseFragment implements BaseFragment.ExitF
         mPanoramaUrl = ParamsUtil.DETAIL_PANORAMA_URL;
     }
 
-    public PanoramaFragment(int resId) {
+    public PanoramaFragment(int resid) {
         super();
-        mImgResId = resId;
+        mResId = resid;
     }
 
     @Override
@@ -54,16 +54,27 @@ public class PanoramaFragment extends BaseFragment implements BaseFragment.ExitF
     }
 
     @Override
+    public void removeViews() {
+        ViewGroup contentView = getActivity().getWindow().getDecorView().findViewById(android.R.id.content);
+        if (ismScreenPortrait()) {
+            contentView.removeView(mPanoramaViewPanel.getPortraitView());
+        } else {
+            contentView.removeView(mPanoramaViewPanel.getLandscapeView());
+        }
+    }
+
+    @Override
     public View initPortraitView(ViewGroup view) {
         if (null == mPanoramaViewPanel) {
             mPanoramaViewPanel = new PanoramaViewPanel(getContext());
         }
+//        mPanoramaViewPanel.setInitData(mPanoramaUrl);
+        mPanoramaViewPanel.setInitData(mResId);
+        mPanoramaViewPanel = mPanoramaViewPanel.getPortraitView();
         mPanoramaViewPanel.setExitFragmentListener(this);
         mPanoramaViewPanel.setParentId(view.getId());
-//        mPanoramaViewPanel.setInitData(mPanoramaUrl);
-        mPanoramaViewPanel.setInitData(mImgResId);
-        view.removeView(mPanoramaViewPanel.getPortraitView());
-        view.addView(mPanoramaViewPanel.getPortraitView());
+        view.removeView(mPanoramaViewPanel);
+        view.addView(mPanoramaViewPanel);
         return mPanoramaViewPanel;
     }
 
@@ -72,12 +83,13 @@ public class PanoramaFragment extends BaseFragment implements BaseFragment.ExitF
         if (null == mPanoramaViewPanel) {
             mPanoramaViewPanel = new PanoramaViewPanel(getContext());
         }
+//        mPanoramaViewPanel.setInitData(mPanoramaUrl);
+        mPanoramaViewPanel.setInitData(mResId);
+        mPanoramaViewPanel = mPanoramaViewPanel.getLandscapeView();
         mPanoramaViewPanel.setExitFragmentListener(this);
         mPanoramaViewPanel.setParentId(view.getId());
-//        mPanoramaViewPanel.setInitData(mPanoramaUrl);
-        mPanoramaViewPanel.setInitData(mImgResId);
-        view.removeView(mPanoramaViewPanel.getLandscapeView());
-        view.addView(mPanoramaViewPanel.getLandscapeView());
+        view.removeView(mPanoramaViewPanel);
+        view.addView(mPanoramaViewPanel);
         return mPanoramaViewPanel;
     }
 

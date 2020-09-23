@@ -1,18 +1,30 @@
 package com.example.detailmodule.fragments;
 
+import android.content.ComponentName;
+import android.content.ServiceConnection;
 import android.content.res.Configuration;
+import android.os.IBinder;
+import android.os.RemoteException;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.detailmodule.R;
+import com.example.detailmodule.mplay.IMediaPbService;
 import com.example.detailmodule.utils.HttpUtils;
+import com.example.detailmodule.utils.MediaUtils;
 import com.example.detailmodule.utils.ParamsUtil;
 import com.example.detailmodule.views.DetailViewPanel;
+import com.example.detailmodule.views.InterceptEventView;
 
 import java.io.UnsupportedEncodingException;
 
@@ -35,7 +47,7 @@ public class DetailFragment extends BaseFragment implements BaseFragment.ExitFra
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    HttpUtils.downLoadFileFromUri(getContext(), ParamsUtil.DETAIL_PANORAMA_URL, null,null);
+                    HttpUtils.downLoadFileFromUri(getContext(), ParamsUtil.DETAIL_PANORAMA_URL, null, null);
                 }
             }).start();
         }
@@ -51,12 +63,23 @@ public class DetailFragment extends BaseFragment implements BaseFragment.ExitFra
         }
 
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-        Fragment detail = getActivity().getSupportFragmentManager().findFragmentByTag("detail");
+        Fragment detail = getActivity().getSupportFragmentManager().findFragmentByTag(BaseFragment.DETAIL_TAG);
+
         if (null != detail) {
             fragmentTransaction.hide(detail);
             fragmentTransaction.remove(detail);
+            fragmentTransaction.commit();
         }
-        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void removeViews() {
+        ViewGroup contentView = getActivity().getWindow().getDecorView().findViewById(android.R.id.content);
+        if (ismScreenPortrait()) {
+            contentView.removeView(mDetailViewPanel.getPortraitView());
+        } else {
+            contentView.removeView(mDetailViewPanel.getLandscapeView());
+        }
     }
 
     @Override
@@ -64,12 +87,13 @@ public class DetailFragment extends BaseFragment implements BaseFragment.ExitFra
         if (null == mDetailViewPanel) {
             mDetailViewPanel = new DetailViewPanel(getContext());
         }
+        mDetailViewPanel.setInitData(mDetailTitle, mDetailDescription, mDetailBitmapUrl);
+        mDetailViewPanel = mDetailViewPanel.getPortraitView();
         mDetailViewPanel.setExitFragmentListener(this);
         mDetailViewPanel.setDetailFragment(this);
         mDetailViewPanel.setParentId(view.getId());
-        mDetailViewPanel.setInitData(mDetailTitle, mDetailDescription, mDetailBitmapUrl);
-        view.removeView(mDetailViewPanel.getPortraitView());
-        view.addView(mDetailViewPanel.getPortraitView());
+        view.removeView(mDetailViewPanel);
+        view.addView(mDetailViewPanel);
         return mDetailViewPanel;
     }
 
@@ -78,12 +102,13 @@ public class DetailFragment extends BaseFragment implements BaseFragment.ExitFra
         if (null == mDetailViewPanel) {
             mDetailViewPanel = new DetailViewPanel(getContext());
         }
+        mDetailViewPanel.setInitData(mDetailTitle, mDetailDescription, mDetailBitmapUrl);
+        mDetailViewPanel= mDetailViewPanel.getLandscapeView();
         mDetailViewPanel.setExitFragmentListener(this);
         mDetailViewPanel.setDetailFragment(this);
         mDetailViewPanel.setParentId(view.getId());
-        mDetailViewPanel.setInitData(mDetailTitle, mDetailDescription, mDetailBitmapUrl);
-        view.removeView(mDetailViewPanel.getLandscapeView());
-        view.addView(mDetailViewPanel.getLandscapeView());
+        view.removeView(mDetailViewPanel);
+        view.addView(mDetailViewPanel);
         return mDetailViewPanel;
     }
 

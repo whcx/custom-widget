@@ -3,6 +3,8 @@ package com.example.detailmodule.fragments;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +17,41 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.detailmodule.utils.ParamsUtil;
 
+import java.lang.ref.WeakReference;
+
 
 public abstract class BaseFragment extends Fragment {
     public boolean mScreenPortrait = true;
     public static final String PANORAMA_TAG = "panorama_view";
     public static final String DETAIL_TAG = "detail_view";
     public static final String LUCKY_TAG = "lucky_view";
+    public static final String SCAN_LINE_TAG = "scan_line_view";
+    private FragmentHandler mFragmentHandler;
 
     public BaseFragment() {
+        if (mFragmentHandler == null) {
+            mFragmentHandler = new FragmentHandler(this);
+        }
+    }
+
+    private class FragmentHandler extends Handler {
+        WeakReference<BaseFragment> baseFragmentWeakReference;
+        public FragmentHandler(BaseFragment baseFragment_) {
+            baseFragmentWeakReference = new WeakReference<>(baseFragment_);
+        }
+
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+        }
+    }
+
+    public Handler getHandler() {
+        return mFragmentHandler;
     }
 
     public static interface ExitFragmentListener {
+        void removeViews();
         void removeFragment();
     }
 

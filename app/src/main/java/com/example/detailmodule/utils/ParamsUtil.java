@@ -9,7 +9,7 @@ import android.view.WindowManager;
 
 public class ParamsUtil {
     private static final String TAG = ParamsUtil.class.getSimpleName();
-    private final Context mContext;
+    private static Context mContext = null;
     private static int mScreenWidth = 0;
     private static int mScreenHeight = 0;
     public static String DETAIL_TITLE="";
@@ -17,9 +17,16 @@ public class ParamsUtil {
     public static String DETAIL_BITMAP_URL="";
     public static String DETAIL_AUDIO_URL="";
     public static String DETAIL_PANORAMA_URL="";
+    public static String IMG_FILE_DIRS = "/sdcard/Assets/drawable/";
+    public static float SCAN_SPEED= 3.5f;
 
     public ParamsUtil(Context context) {
         mContext = context;
+    }
+
+    public static String getAppFileDirs(Context context) {
+        IMG_FILE_DIRS = "/sdcard/Android/data/"+context.getPackageName()+"/files/";
+        return IMG_FILE_DIRS;
     }
 
     public static int getScreenWidth(Context context) {
