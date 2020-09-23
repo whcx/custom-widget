@@ -7,11 +7,17 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +25,7 @@ import com.example.detailmodule.fragments.BaseFragment;
 import com.example.detailmodule.fragments.DetailFragment;
 import com.example.detailmodule.fragments.PanoramaFragment;
 import com.example.detailmodule.fragments.RedPaperFragment;
+import com.example.detailmodule.fragments.ScanLineFragment;
 import com.example.detailmodule.utils.HttpUtils;
 import com.example.detailmodule.utils.ParamsUtil;
 
@@ -27,6 +34,7 @@ import java.io.UnsupportedEncodingException;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     ConstraintLayout mConstraintLayout;
+    Context mContext;
     // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-lib");
@@ -44,21 +52,33 @@ public class MainActivity extends AppCompatActivity {
         WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
         layoutParams.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
         getWindow().setAttributes(layoutParams);
-
+        mContext = this;
         // Example of a call to a native method
         TextView tv = findViewById(R.id.sample_text);
         tv.setText(stringFromJNI());
         mConstraintLayout = findViewById(R.id.basePanel);
-        mConstraintLayout.removeAllViews();
+//        mConstraintLayout.removeAllViews();
+        Button btn = findViewById(R.id.sample_btn);
+        btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                testPanoramaView();
+//                startActivity(new Intent(MainActivity.this, AboutActivity.class));
+//                testScanLineView();
+//                testDetailView();
+//                stopScanLineView();
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         Log.d(TAG,"onConfigurationChanged,onResume");
-//        testLuckyView();
+        testLuckyView();
 //        testDetailView();
-        testPanoramaView();
+//        testPanoramaView();
+//        testScanLineView();
     }
 
     @Override
@@ -94,15 +114,58 @@ public class MainActivity extends AppCompatActivity {
     public void testPanoramaView() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        PanoramaFragment panoramaFragment = new PanoramaFragment(R.drawable.keting);
+        PanoramaFragment panoramaFragment = new PanoramaFragment(R.drawable.test_panorama);
 
         fragmentTransaction.add(panoramaFragment, BaseFragment.PANORAMA_TAG);
         fragmentTransaction.show(panoramaFragment);
         fragmentTransaction.commit();
     }
+
+    public void testScanLineView() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        ScanLineFragment scanLineFragment = new ScanLineFragment("img_scan_6.png");
+
+        fragmentTransaction.add(scanLineFragment, BaseFragment.SCAN_LINE_TAG);
+        fragmentTransaction.show(scanLineFragment);
+        fragmentTransaction.commit();
+    }
+
+    public void stopScanLineView() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        ScanLineFragment scanLineFragment = (ScanLineFragment)fragmentManager.findFragmentByTag(BaseFragment.SCAN_LINE_TAG);
+        if (null != scanLineFragment) {
+            scanLineFragment.removeFragment();
+            fragmentTransaction.hide(scanLineFragment);
+            fragmentTransaction.remove(scanLineFragment);
+            fragmentTransaction.commit();
+        }
+    }
+
     /**
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */
     public native String stringFromJNI();
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        return super.dispatchKeyEvent(event);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean onGenericMotionEvent(MotionEvent event) {
+        return super.onGenericMotionEvent(event);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return super.dispatchTouchEvent(ev);
+    }
 }

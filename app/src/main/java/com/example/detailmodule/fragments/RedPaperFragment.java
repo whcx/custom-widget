@@ -8,10 +8,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.detailmodule.utils.HttpUtils;
+import com.example.detailmodule.utils.ParamsUtil;
 import com.example.detailmodule.views.LuckyView;
 
 public class RedPaperFragment extends BaseFragment implements HttpUtils.LoadSuccess, BaseFragment.ExitFragmentListener{
-    private final String IMG_FILE_DIRS = "/sdcard/Assets/drawable/";
     private String mImgUrl;
     private String mImgFileName;
     private final String mTextStr;
@@ -24,7 +24,6 @@ public class RedPaperFragment extends BaseFragment implements HttpUtils.LoadSucc
         mTextStr = textStr;
         android.util.Log.d("","mImgFileName="+mImgFileName);
     }
-
     private String checkFileName(String fileName) {
         if (fileName == null || fileName.equalsIgnoreCase("")) {
             return null;
@@ -42,7 +41,7 @@ public class RedPaperFragment extends BaseFragment implements HttpUtils.LoadSucc
         }
         mLuckyView.setExitFragmentListener(this);
         if (null != mImgFileName) {
-            mLuckyView.setImgFilePath(IMG_FILE_DIRS+mImgFileName);
+            mLuckyView.setImgFilePath(ParamsUtil.IMG_FILE_DIRS+mImgFileName);
         } else {
             mLuckyView.setImgUrl(mImgUrl);
         }
@@ -59,7 +58,7 @@ public class RedPaperFragment extends BaseFragment implements HttpUtils.LoadSucc
         }
         mLuckyView.setExitFragmentListener(this);
         if (null != mImgFileName) {
-            mLuckyView.setImgFilePath(IMG_FILE_DIRS+mImgFileName);
+            mLuckyView.setImgFilePath(ParamsUtil.IMG_FILE_DIRS+mImgFileName);
         } else {
             mLuckyView.setImgUrl(mImgUrl);
         }
@@ -102,6 +101,9 @@ public class RedPaperFragment extends BaseFragment implements HttpUtils.LoadSucc
 
     @Override
     public void removeFragment() {
+        if (null == mLuckyView) {
+            return;
+        }
         ViewGroup contentView = getActivity().getWindow().getDecorView().findViewById(android.R.id.content);
         contentView.removeView(mLuckyView);
 
@@ -113,5 +115,14 @@ public class RedPaperFragment extends BaseFragment implements HttpUtils.LoadSucc
             fragmentTransaction.remove(luckyFragment);
             fragmentTransaction.commit();
         }
+    }
+
+    @Override
+    public void removeViews() {
+        if (null == mLuckyView) {
+            return;
+        }
+        ViewGroup contentView = getActivity().getWindow().getDecorView().findViewById(android.R.id.content);
+        contentView.removeView(mLuckyView);
     }
 }

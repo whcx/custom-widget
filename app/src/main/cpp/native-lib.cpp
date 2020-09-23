@@ -1,6 +1,8 @@
 #include <jni.h>
 #include <string>
 
+#include "include/Singleton.h"
+
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_example_detailmodule_MainActivity_stringFromJNI(
         JNIEnv* env,

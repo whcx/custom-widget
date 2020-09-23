@@ -88,6 +88,7 @@ public class LuckyView extends ConstraintLayout implements View.OnClickListener 
         mImgFilePath = filePath;
         if (null != mImageView && null != mImgFilePath) {
             mImageView.setImageDrawable(Drawable.createFromPath(mImgFilePath));
+            invalidate();
         }
     }
 
